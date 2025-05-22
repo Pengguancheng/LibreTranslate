@@ -26,9 +26,9 @@ RUN if [ "$with_models" = "true" ]; then  \
     pip3 install --no-cache-dir -e .;  \
     # initialize the language models
     if [ ! -z "$models" ]; then \
-    ./scripts/install_models.py --load_only_lang_codes "$models";   \
+    ./venv/bin/python scripts/install_models.py --load_only_lang_codes "$models";   \
     else \
-    ./scripts/install_models.py;  \
+    ./venv/bin/python scripts/install_models.py;  \
     fi \
     fi
 
