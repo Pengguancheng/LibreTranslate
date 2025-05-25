@@ -2,13 +2,13 @@ version: "3"
 
 services:
   libretranslate-cuda:
-    container_name: libretranslate-cuda
+    image: libre/translate-cuda:v1.0.0
     build:
       context: .
       dockerfile: docker/cuda.Dockerfile
     restart: unless-stopped
     ports:
-      - "5000:5000"
+      - "5001:5000"
     deploy:
       resources:
         reservations:
@@ -16,3 +16,8 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+

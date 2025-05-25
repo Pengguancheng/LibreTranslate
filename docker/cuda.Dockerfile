@@ -1,8 +1,8 @@
 FROM nvidia/cuda:12.4.1-devel-ubuntu20.04
 
 ENV ARGOS_DEVICE_TYPE auto
-ARG with_models=false
-ARG models=""
+ARG with_models=true
+ARG models="zh,en,th,id"
 
 WORKDIR /app
 
@@ -20,15 +20,17 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 RUN pip3 install --no-cache-dir torch==1.12.0+cu116 -f https://download.pytorch.org/whl/torch_stable.html
 
 COPY . .
+# Copy local language models if they exist
+COPY ./models/*.argosmodel /app/models/
 
 RUN if [ "$with_models" = "true" ]; then  \
     # install only the dependencies first
     pip3 install --no-cache-dir -e .;  \
     # initialize the language models
     if [ ! -z "$models" ]; then \
-    ./venv/bin/python scripts/install_models.py --load_only_lang_codes "$models";   \
+    python3 scripts/install_models.py --load_only_lang_codes "$models";   \
     else \
-    ./venv/bin/python scripts/install_models.py;  \
+    python3 scripts/install_models.py;  \
     fi \
     fi
 
